@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 require 'set'
+require 'io/console'
 
 # 素数スピード練習プログラム
 
@@ -10,6 +11,15 @@ class SoSpeed
   PRIMES_ADVANCED = [2, 3, 5, 7, 11]
   QUESTION_COUNT = 5
   ERROR_WAIT_TIME = 2
+
+  # キーボード割り当て
+  KEY_MAPPING = {
+    'a' => 2,
+    's' => 3,
+    'd' => 5,
+    'f' => 7,
+    'g' => 11
+  }
 
   # 難易度設定
   DIFFICULTY_SETTINGS = {
@@ -43,6 +53,7 @@ class SoSpeed
     @questions = []
     @start_time = nil
     @difficulty = nil
+    @input_mode = nil
   end
 
   # 難易度を選択
@@ -82,6 +93,44 @@ class SoSpeed
 
     puts ""
     puts "難易度: #{DIFFICULTY_SETTINGS[@difficulty][:name]} が選択されました"
+    puts ""
+  end
+
+  # 操作方法を選択
+  def select_input_mode
+    puts ""
+    puts "=" * 50
+    puts "操作方法を選択してください"
+    puts "=" * 50
+    puts ""
+    puts "1. スペース区切り入力方式"
+    puts "   例: 2 3 5 と入力してEnter"
+    puts ""
+    puts "2. キーボード割り当て方式"
+    puts "   a:2  s:3  d:5  f:7  g:11"
+    puts "   キーを押すと数字が表示され、Enterで確定"
+    puts "   Backspaceで削除可能"
+    puts ""
+
+    loop do
+      print "操作方法を選択 (1-2) > "
+      input = gets.chomp
+
+      case input
+      when "1"
+        @input_mode = :space_separated
+        break
+      when "2"
+        @input_mode = :keyboard_mapping
+        break
+      else
+        puts "1, 2のいずれかを入力してください"
+      end
+    end
+
+    puts ""
+    mode_name = @input_mode == :space_separated ? "スペース区切り入力方式" : "キーボード割り当て方式"
+    puts "操作方法: #{mode_name} が選択されました"
     puts ""
   end
 
@@ -129,6 +178,9 @@ class SoSpeed
     # 難易度選択
     select_difficulty
 
+    # 操作方法選択
+    select_input_mode
+
     puts "Enterキーを押してスタート!"
     gets
 
@@ -145,6 +197,44 @@ class SoSpeed
     show_result(elapsed_time)
   end
 
+  # キーボード割り当て方式で入力
+  def input_with_keyboard_mapping
+    factors = []
+
+    print "素因数を入力 > "
+    STDOUT.flush
+
+    loop do
+      char = STDIN.getch
+
+      case char
+      when "\r", "\n"  # Enter
+        puts ""
+        break
+      when "\u007F", "\b"  # Backspace (127) or Backspace (8)
+        unless factors.empty?
+          last_factor = factors.pop
+          # 削除する文字数を計算（数値の桁数 + スペース1文字）
+          delete_count = last_factor.to_s.length + 1
+          # その文字数分バックスペース処理
+          delete_count.times { print "\b \b" }
+          STDOUT.flush
+        end
+      when *KEY_MAPPING.keys  # a, s, d, f, g
+        prime = KEY_MAPPING[char]
+        factors << prime
+        print "#{prime} "
+        STDOUT.flush
+      when "\u0003"  # Ctrl+C
+        puts ""
+        exit
+      # その他のキーは無視
+      end
+    end
+
+    factors.join(' ')
+  end
+
   # 1問を解く
   def solve_question(question, question_number)
     puts ""
@@ -153,8 +243,13 @@ class SoSpeed
     puts "-" * 50
 
     loop do
-      print "素因数を入力 > "
-      input = gets.chomp
+      # 入力方式に応じた入力方法を選択
+      input = if @input_mode == :keyboard_mapping
+                input_with_keyboard_mapping
+              else
+                print "素因数を入力 > "
+                gets.chomp
+              end
 
       # 空白入力は無視
       if input.empty?
