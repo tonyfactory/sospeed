@@ -1,26 +1,113 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+require 'set'
+
 # 素数スピード練習プログラム
 
 class SoSpeed
-  PRIMES = [2, 3, 5, 7]
+  PRIMES_BASIC = [2, 3, 5, 7]
+  PRIMES_ADVANCED = [2, 3, 5, 7, 11]
   QUESTION_COUNT = 5
   ERROR_WAIT_TIME = 2
+
+  # 難易度設定
+  DIFFICULTY_SETTINGS = {
+    level1: {
+      name: "レベル1",
+      primes: PRIMES_BASIC,
+      factor_count: (2..2),
+      max_number: 50
+    },
+    level2: {
+      name: "レベル2",
+      primes: PRIMES_BASIC,
+      factor_count: (3..3),
+      max_number: 500
+    },
+    level3: {
+      name: "レベル3",
+      primes: PRIMES_ADVANCED,
+      factor_count: (4..4),
+      max_number: 1000
+    },
+    level4: {
+      name: "レベル4",
+      primes: PRIMES_ADVANCED,
+      factor_count: (4..5),
+      max_number: 10000
+    }
+  }
 
   def initialize
     @questions = []
     @start_time = nil
+    @difficulty = nil
+  end
+
+  # 難易度を選択
+  def select_difficulty
+    puts ""
+    puts "=" * 50
+    puts "難易度を選択してください"
+    puts "=" * 50
+    puts ""
+    puts "1. レベル1 (素数: 2,3,5,7 / 2個 / 数字50まで)"
+    puts "2. レベル2 (素数: 2,3,5,7 / 3個 / 数字500まで)"
+    puts "3. レベル3 (素数: 2,3,5,7,11 / 4個 / 数字1000まで)"
+    puts "4. レベル4 (素数: 2,3,5,7,11 / 4〜5個 / 数字10000まで)"
+    puts ""
+
+    loop do
+      print "レベルを選択 (1-4) > "
+      input = gets.chomp
+
+      case input
+      when "1"
+        @difficulty = :level1
+        break
+      when "2"
+        @difficulty = :level2
+        break
+      when "3"
+        @difficulty = :level3
+        break
+      when "4"
+        @difficulty = :level4
+        break
+      else
+        puts "1, 2, 3, 4のいずれかを入力してください"
+      end
+    end
+
+    puts ""
+    puts "難易度: #{DIFFICULTY_SETTINGS[@difficulty][:name]} が選択されました"
+    puts ""
   end
 
   # 問題を生成
   def generate_questions
+    settings = DIFFICULTY_SETTINGS[@difficulty]
+    primes = settings[:primes]
+    factor_range = settings[:factor_count]
+    max_number = settings[:max_number]
+
+    used_numbers = Set.new  # 既に使用した数値を記録
+
     QUESTION_COUNT.times do
-      # 2〜3個の素数を選ぶ
-      count = rand(2..3)
-      factors = Array.new(count) { PRIMES.sample }
-      number = factors.reduce(:*)
-      @questions << { number: number, factors: factors.sort }
+      # 上限を超えない、かつ重複しない数を生成するまでループ
+      loop do
+        count = rand(factor_range)
+        factors = Array.new(count) { primes.sample }
+        number = factors.reduce(:*)
+
+        # 上限以下で、かつ未使用の数値の場合のみ問題として採用
+        if number <= max_number && !used_numbers.include?(number)
+          used_numbers.add(number)
+          @questions << { number: number, factors: factors.sort }
+          break
+        end
+      end
     end
   end
 
@@ -36,6 +123,12 @@ class SoSpeed
     puts "- 順序は問いません"
     puts "- #{QUESTION_COUNT}問すべて解くまでの時間を計測します"
     puts ""
+    puts "Enterキーを押して次へ!"
+    gets
+
+    # 難易度選択
+    select_difficulty
+
     puts "Enterキーを押してスタート!"
     gets
 
