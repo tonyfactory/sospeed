@@ -3,6 +3,7 @@
 
 require 'set'
 require 'io/console'
+require 'optparse'
 
 # 素数スピード練習プログラム
 
@@ -49,11 +50,11 @@ class SoSpeed
     }
   }
 
-  def initialize
+  def initialize(difficulty: nil, input_mode: nil)
     @questions = []
     @start_time = nil
-    @difficulty = nil
-    @input_mode = nil
+    @difficulty = difficulty
+    @input_mode = input_mode
   end
 
   # 難易度を選択
@@ -175,11 +176,11 @@ class SoSpeed
     puts "Enterキーを押して次へ!"
     gets
 
-    # 難易度選択
-    select_difficulty
+    # 難易度選択（オプション指定がない場合のみ）
+    select_difficulty if @difficulty.nil?
 
-    # 操作方法選択
-    select_input_mode
+    # 操作方法選択（オプション指定がない場合のみ）
+    select_input_mode if @input_mode.nil?
 
     puts "Enterキーを押してスタート!"
     gets
@@ -296,8 +297,73 @@ class SoSpeed
   end
 end
 
+# コマンドラインオプション解析
+def parse_options
+  options = {}
+
+  OptionParser.new do |opts|
+    opts.banner = "使用方法: ruby sospeed.rb [オプション]"
+    opts.separator ""
+    opts.separator "オプション:"
+
+    opts.on("--level LEVEL", Integer, "難易度を指定 (1-4)") do |level|
+      unless (1..4).include?(level)
+        puts "=" * 60
+        puts "エラー: レベルは1〜4の範囲で指定してください"
+        puts "=" * 60
+        puts ""
+        puts "利用可能なレベル:"
+        puts ""
+        puts "  レベル1: 素数 2,3,5,7 を使用 / 2個の素数 / 数字50まで / 5問"
+        puts "  レベル2: 素数 2,3,5,7 を使用 / 3個の素数 / 数字500まで / 5問"
+        puts "  レベル3: 素数 2,3,5,7,11 を使用 / 4個の素数 / 数字1000まで / 5問"
+        puts "  レベル4: 素数 2,3,5,7,11 を使用 / 4〜5個の素数 / 数字10000まで / 5問"
+        puts ""
+        puts "例: ruby sospeed.rb --level 3"
+        puts "=" * 60
+        exit 1
+      end
+      options[:difficulty] = :"level#{level}"
+    end
+
+    opts.on("--mode MODE", Integer, "入力モードを指定 (1=スペース区切り, 2=キーボード割り当て)") do |mode|
+      unless (1..2).include?(mode)
+        puts "=" * 60
+        puts "エラー: モードは1または2を指定してください"
+        puts "=" * 60
+        puts ""
+        puts "利用可能な入力モード:"
+        puts ""
+        puts "  モード1: スペース区切り入力方式"
+        puts "    - 素因数を半角スペース区切りで入力"
+        puts "    - 例: 2 3 5 と入力してEnterキーで確定"
+        puts "    - 順序は問いません（2 5 3 でも正解）"
+        puts ""
+        puts "  モード2: キーボード割り当て方式"
+        puts "    - キーボードに素数を割り当て"
+        puts "    - a:2  s:3  d:5  f:7  g:11"
+        puts "    - キーを押すと数字が表示され、Enterで確定"
+        puts "    - Backspaceで削除可能"
+        puts ""
+        puts "例: ruby sospeed.rb --mode 2"
+        puts "=" * 60
+        exit 1
+      end
+      options[:input_mode] = mode == 1 ? :space_separated : :keyboard_mapping
+    end
+
+    opts.on("-h", "--help", "このヘルプを表示") do
+      puts opts
+      exit
+    end
+  end.parse!
+
+  options
+end
+
 # ゲーム実行
 if __FILE__ == $0
-  game = SoSpeed.new
+  options = parse_options
+  game = SoSpeed.new(difficulty: options[:difficulty], input_mode: options[:input_mode])
   game.start
 end

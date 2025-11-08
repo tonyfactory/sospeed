@@ -10,5 +10,5 @@ COPY sospeed.rb .
 # スクリプトに実行権限を付与
 RUN chmod +x sospeed.rb
 
-# デフォルトコマンド
-CMD ["ruby", "sospeed.rb"]
+# エントリーポイント（コマンドライン引数を受け取れるように）
+ENTRYPOINT ["ruby", "sospeed.rb"]
