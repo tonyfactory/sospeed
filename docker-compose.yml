@@ -1,0 +1,10 @@
+services:
+  sospeed:
+    build: .
+    container_name: sospeed-game
+    # インタラクティブモードを有効化（ゲームの入力に必要）
+    stdin_open: true
+    tty: true
+    # 開発中のコード変更を即座に反映
+    volumes:
+      - ./sospeed.rb:/app/sospeed.rb:ro

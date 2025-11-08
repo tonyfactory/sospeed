@@ -7,7 +7,49 @@
 ## プログラム情報
 - **ファイル名**: `sospeed.rb`
 - **言語**: Ruby
-- **実行方法**: `ruby sospeed.rb`
+- **実行方法**:
+  - ローカル環境: `ruby sospeed.rb`
+  - Docker環境: `docker compose run --rm sospeed`
+
+## 遊び方
+
+### 方法1: ローカル環境で実行（Ruby必須）
+
+Rubyがインストールされている環境で実行する方法です。
+
+```bash
+ruby sospeed.rb
+```
+
+**必要な環境:**
+- Ruby 2.5以上（推奨: Ruby 3.x）
+
+### 方法2: Docker環境で実行（Ruby不要）
+
+ローカル環境にRubyがインストールされていなくても、Dockerさえあればプレイできます。
+
+**必要な環境:**
+- Docker
+- Docker Compose
+
+**起動方法:**
+
+```bash
+# コンテナをビルドして起動（初回は少し時間がかかります）
+docker compose run --rm sospeed
+```
+
+ゲームが起動したら、通常通りプレイできます。
+
+**終了方法:**
+
+ゲーム終了後、自動的にコンテナが削除されます（`--rm`オプションにより）。
+途中で終了したい場合は `Ctrl+C` を押してください。
+
+**補足:**
+- 初回起動時はDockerイメージのビルドに時間がかかりますが、2回目以降は素早く起動します
+- `sospeed.rb`を編集した場合、次回の`docker compose run`で変更が反映されます
+- イメージを再ビルドしたい場合: `docker compose build`
 
 ## ゲームルール
 

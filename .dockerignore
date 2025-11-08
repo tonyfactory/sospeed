@@ -1,0 +1,16 @@
+# Git関連
+.git
+.gitignore
+
+# エディタ/IDE設定
+.vscode
+.idea
+.claude
+.ruby-lsp
+
+# ドキュメント
+*.md
+spec.md
+
+# その他
+.DS_Store
