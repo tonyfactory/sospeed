@@ -10,7 +10,7 @@ require 'optparse'
 class SoSpeed
   PRIMES_BASIC = [2, 3, 5, 7]
   PRIMES_ADVANCED = [2, 3, 5, 7, 11]
-  QUESTION_COUNT = 5
+  DEFAULT_QUESTION_COUNT = 5
   ERROR_WAIT_TIME = 2
 
   # キーボード割り当て
@@ -50,11 +50,12 @@ class SoSpeed
     }
   }
 
-  def initialize(difficulty: nil, input_mode: nil)
+  def initialize(difficulty: nil, input_mode: nil, question_count: nil)
     @questions = []
     @start_time = nil
     @difficulty = difficulty
     @input_mode = input_mode
+    @question_count = question_count || DEFAULT_QUESTION_COUNT
   end
 
   # 難易度を選択
@@ -144,7 +145,7 @@ class SoSpeed
 
     used_numbers = Set.new  # 既に使用した数値を記録
 
-    QUESTION_COUNT.times do
+    @question_count.times do
       # 上限を超えない、かつ重複しない数を生成するまでループ
       loop do
         count = rand(factor_range)
@@ -171,7 +172,7 @@ class SoSpeed
     puts "- 表示された数字を素因数分解してください"
     puts "- 素数をスペース区切りで入力してください(例: 2 3 5)"
     puts "- 順序は問いません"
-    puts "- #{QUESTION_COUNT}問すべて解くまでの時間を計測します"
+    puts "- #{@question_count}問すべて解くまでの時間を計測します"
     puts ""
     puts "Enterキーを押して次へ!"
     gets
@@ -352,6 +353,21 @@ def parse_options
       options[:input_mode] = mode == 1 ? :space_separated : :keyboard_mapping
     end
 
+    opts.on("-q", "--questions NUM", Integer, "問題数を指定（裏モード）") do |num|
+      unless (1..100).include?(num)
+        puts "=" * 60
+        puts "エラー: 問題数は1〜100の範囲で指定してください"
+        puts "=" * 60
+        puts ""
+        puts "例: ruby sospeed.rb --questions 10"
+        puts "    ruby sospeed.rb -q 20"
+        puts ""
+        puts "=" * 60
+        exit 1
+      end
+      options[:question_count] = num
+    end
+
     opts.on("-h", "--help", "このヘルプを表示") do
       puts opts
       exit
@@ -364,6 +380,10 @@ end
 # ゲーム実行
 if __FILE__ == $0
   options = parse_options
-  game = SoSpeed.new(difficulty: options[:difficulty], input_mode: options[:input_mode])
+  game = SoSpeed.new(
+    difficulty: options[:difficulty],
+    input_mode: options[:input_mode],
+    question_count: options[:question_count]
+  )
   game.start
 end

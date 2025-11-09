@@ -10,6 +10,11 @@
 - **実行方法**:
   - ローカル環境: `ruby sospeed.rb`
   - Docker環境: `docker compose run --rm sospeed`
+- **コマンドラインオプション**:
+  - `--level LEVEL` または `-l LEVEL`: 難易度を指定（1〜4）
+  - `--mode MODE` または `-m MODE`: 入力モードを指定（1=スペース区切り、2=キーボード割り当て）
+  - `--questions NUM` または `-q NUM`: 問題数を指定（1〜100、裏モード）
+  - `--help` または `-h`: ヘルプを表示
 
 ## 遊び方
 
@@ -18,7 +23,13 @@
 Rubyがインストールされている環境で実行する方法です。
 
 ```bash
+# 通常モード（対話形式で難易度・操作方法・問題数を選択）
 ruby sospeed.rb
+
+# オプション指定モード
+ruby sospeed.rb --level 3 --mode 2              # レベル3、キーボード方式、5問
+ruby sospeed.rb --questions 10                  # 問題数を10問に指定（裏モード）
+ruby sospeed.rb -l 2 -m 1 -q 20                 # 短縮形式も可能
 ```
 
 **必要な環境:**
@@ -35,8 +46,13 @@ ruby sospeed.rb
 **起動方法:**
 
 ```bash
-# コンテナをビルドして起動（初回は少し時間がかかります）
+# 通常モード
 docker compose run --rm sospeed
+
+# オプション指定モード
+docker compose run --rm sospeed ruby sospeed.rb --level 3 --mode 2
+docker compose run --rm sospeed ruby sospeed.rb --questions 10
+docker compose run --rm sospeed ruby sospeed.rb -l 2 -m 1 -q 20
 ```
 
 ゲームが起動したら、通常通りプレイできます。
@@ -56,7 +72,7 @@ docker compose run --rm sospeed
 ### 基本仕様
 - **難易度**: レベル1〜4の4段階
 - **操作方法**: 2種類の入力方式から選択可能
-- **問題数**: 5問
+- **問題数**: 5問（デフォルト）、または`--questions`オプションで1〜100問を指定可能
 - **問題形式**: 難易度に応じた素数を掛け合わせた数値を出題
 - **制限時間**: なし（全問正解するまでの時間を計測）
 
@@ -89,7 +105,7 @@ docker compose run --rm sospeed
 ### 問題生成ルール
 - 各問題は難易度に応じた個数の素数をランダムに選択して掛け合わせて生成
 - 同じ素数の重複を認める（例: 2×2×3 = 12）
-- 5問の中で同じ数値は出題されない（重複なし）
+- 出題される全問題の中で同じ数値は出題されない（重複なし）
 - 生成された数値が上限を超える場合は再生成
 
 ### 操作方法
@@ -193,7 +209,7 @@ docker compose run --rm sospeed
 - 表示された数字を素因数分解してください
 - 素数をスペース区切りで入力してください(例: 2 3 5)
 - 順序は問いません
-- 5問すべて解くまでの時間を計測します
+- N問すべて解くまでの時間を計測します（Nは指定された問題数）
 
 Enterキーを押して次へ!
 ```
@@ -301,7 +317,7 @@ Enterキーを押してスタート!
   - 定数:
     - `PRIMES_BASIC`: 基本の素数配列 [2, 3, 5, 7]
     - `PRIMES_ADVANCED`: 上級の素数配列 [2, 3, 5, 7, 11]
-    - `QUESTION_COUNT`: 問題数 (5)
+    - `DEFAULT_QUESTION_COUNT`: デフォルト問題数 (5)
     - `ERROR_WAIT_TIME`: エラー時の待機時間 (2秒)
     - `KEY_MAPPING`: キーボード割り当てのハッシュ
       - 'a' → 2, 's' → 3, 'd' → 5, 'f' → 7, 'g' → 11
@@ -314,6 +330,7 @@ Enterキーを押してスタート!
     - `@start_time`: 計測開始時刻
     - `@difficulty`: 選択された難易度
     - `@input_mode`: 選択された操作方法（:space_separated または :keyboard_mapping）
+    - `@question_count`: 問題数（デフォルト5、オプションで1〜100を指定可能）
 
   - 主要メソッド:
     - `select_difficulty`: 難易度を選択
@@ -344,6 +361,8 @@ Enterキーを押してスタート!
 - ✅ 数値上限設定
 - ✅ 2種類の操作方法（スペース区切り / キーボード割り当て）
 - ✅ キーボード割り当て方式でのBackspace削除機能
+- ✅ コマンドラインオプション対応（難易度・入力モード・問題数の指定）
+- ✅ 問題数指定機能（裏モード、1〜100問）
 
 ## 将来の拡張案
 - タイムランキング機能
