@@ -1,0 +1,42 @@
+{
+  "name": "SoSpeed Ruby Development",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+
+  // コンテナ作成後に実行するコマンド
+  "postCreateCommand": "bundle install",
+
+  // VS Code設定
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "ruby.format": "rubocop",
+        "ruby.lint": {
+          "rubocop": true
+        }
+      },
+      "extensions": [
+        "rebornix.ruby",
+        "castwide.solargraph"
+      ]
+    }
+  },
+
+  // ポートフォワーディング（将来のWeb版用）
+  "forwardPorts": [],
+
+  // ユーザー設定
+  "remoteUser": "vscode",
+
+  // コンテナのライフサイクル設定
+  "shutdownAction": "stopContainer",
+
+  // 環境変数
+  "containerEnv": {
+    "LANG": "ja_JP.UTF-8",
+    "LC_ALL": "ja_JP.UTF-8"
+  }
+}
