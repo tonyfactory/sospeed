@@ -5,10 +5,11 @@ FROM ruby:3.3-slim
 WORKDIR /app
 
 # アプリケーションファイルをコピー
-COPY sospeed.rb .
+COPY lib ./lib
+COPY bin ./bin
 
 # スクリプトに実行権限を付与
-RUN chmod +x sospeed.rb
+RUN chmod +x bin/sospeed
 
 # エントリーポイント（コマンドライン引数を受け取れるように）
-ENTRYPOINT ["ruby", "sospeed.rb"]
+ENTRYPOINT ["ruby", "bin/sospeed"]

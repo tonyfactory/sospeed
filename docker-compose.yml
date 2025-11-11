@@ -7,4 +7,5 @@ services:
     tty: true
     # 開発中のコード変更を即座に反映
     volumes:
-      - ./sospeed.rb:/app/sospeed.rb:ro
+      - ./lib:/app/lib:ro
+      - ./bin:/app/bin:ro
