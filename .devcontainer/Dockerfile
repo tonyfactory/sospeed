@@ -10,6 +10,17 @@ RUN apt-get update && apt-get install -y \
     vim \
     less \
     locales \
+    ca-certificates \
+    gnupg \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node.js（LTS版）をインストール
+RUN mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update \
+    && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -42,8 +53,11 @@ USER $USERNAME
 
 # Gemのインストール先をユーザーホームディレクトリに設定
 ENV GEM_HOME=/home/$USERNAME/.gem
-ENV PATH=$GEM_HOME/bin:$PATH
+ENV PATH=/home/$USERNAME/.local/bin:$GEM_HOME/bin:$PATH
 RUN mkdir -p $GEM_HOME && bundle config set --global path $GEM_HOME
+
+# Claude Code CLIをvscodeユーザーとしてインストール
+RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # デフォルトシェルをbashに設定
 SHELL ["/bin/bash", "-c"]

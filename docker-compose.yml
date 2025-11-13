@@ -1,11 +1,16 @@
 services:
   sospeed:
-    build: .
-    container_name: sospeed-game
-    # インタラクティブモードを有効化（ゲームの入力に必要）
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    container_name: sospeed
     stdin_open: true
     tty: true
-    # 開発中のコード変更を即座に反映
     volumes:
-      - ./lib:/app/lib:ro
-      - ./bin:/app/bin:ro
+      - .:/workspace:cached
+      - ~/.claude:/home/vscode/.claude
+    working_dir: /workspace
+    command: tail -f /dev/null
+    environment:
+      - LANG=ja_JP.UTF-8
+      - LC_ALL=ja_JP.UTF-8

@@ -20,7 +20,8 @@
       },
       "extensions": [
         "rebornix.ruby",
-        "castwide.solargraph"
+        "castwide.solargraph",
+        "anthropic.claude-code"
       ]
     }
   },
