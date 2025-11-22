@@ -11,6 +11,7 @@ module SoSpeed
       def generate(count)
         primes = @settings[:primes]
         factor_range = @settings[:factor_count]
+        min_number = @settings[:min_number]
         max_number = @settings[:max_number]
 
         questions = []
@@ -22,8 +23,8 @@ module SoSpeed
             factors = Array.new(factor_count) { primes.sample }
             number = factors.reduce(:*)
 
-            # 上限以下で、かつ未使用の数値の場合のみ採用
-            if number <= max_number && !used_numbers.include?(number)
+            # 下限以上、上限以下で、かつ未使用の数値の場合のみ採用
+            if number >= min_number && number <= max_number && !used_numbers.include?(number)
               used_numbers.add(number)
               questions << { number: number, factors: factors.sort }
               break

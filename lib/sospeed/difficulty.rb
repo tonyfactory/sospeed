@@ -10,24 +10,28 @@ module SoSpeed
         name: "レベル1",
         primes: PRIMES_BASIC,
         factor_count: (2..2),
+        min_number: 0,
         max_number: 50
       },
       level2: {
         name: "レベル2",
         primes: PRIMES_BASIC,
         factor_count: (3..3),
+        min_number: 50,
         max_number: 500
       },
       level3: {
         name: "レベル3",
         primes: PRIMES_ADVANCED,
         factor_count: (4..4),
+        min_number: 200,
         max_number: 1000
       },
       level4: {
         name: "レベル4",
         primes: PRIMES_ADVANCED,
         factor_count: (4..5),
+        min_number: 1000,
         max_number: 10000
       }
     }

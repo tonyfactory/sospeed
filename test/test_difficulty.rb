@@ -10,6 +10,7 @@ class TestDifficulty < Minitest::Test
     assert_equal "レベル1", level1[:name]
     assert_equal [2, 3, 5, 7], level1[:primes]
     assert_equal (2..2), level1[:factor_count]
+    assert_equal 0, level1[:min_number]
     assert_equal 50, level1[:max_number]
   end
 
@@ -18,6 +19,7 @@ class TestDifficulty < Minitest::Test
     assert_equal "レベル2", level2[:name]
     assert_equal [2, 3, 5, 7], level2[:primes]
     assert_equal (3..3), level2[:factor_count]
+    assert_equal 50, level2[:min_number]
     assert_equal 500, level2[:max_number]
   end
 
@@ -26,6 +28,7 @@ class TestDifficulty < Minitest::Test
     assert_equal "レベル3", level3[:name]
     assert_equal [2, 3, 5, 7, 11], level3[:primes]
     assert_equal (4..4), level3[:factor_count]
+    assert_equal 200, level3[:min_number]
     assert_equal 1000, level3[:max_number]
   end
 
@@ -34,6 +37,7 @@ class TestDifficulty < Minitest::Test
     assert_equal "レベル4", level4[:name]
     assert_equal [2, 3, 5, 7, 11], level4[:primes]
     assert_equal (4..5), level4[:factor_count]
+    assert_equal 1000, level4[:min_number]
     assert_equal 10000, level4[:max_number]
   end
 
