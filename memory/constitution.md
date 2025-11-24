@@ -53,8 +53,10 @@ sospeed/
 │       ├── test_screen.rb
 │       ├── test_input_reader.rb
 │       └── test_keyboard.rb
+├── .devcontainer/                       # Dev Containers設定
+│   ├── devcontainer.json
+│   └── Dockerfile
 ├── Dockerfile                           # Ruby 3.3-slim環境
-├── docker-compose.yml                   # Docker実行設定
 ├── Gemfile                              # 開発・テスト用gem定義
 └── Makefile                             # Docker操作用タスク定義
 ```
@@ -109,8 +111,9 @@ sospeed/
 - `git add`, `git commit`, `git push`などはユーザーが実行
 
 ### Docker実行に関する制約
-- `docker compose up`ではなく`docker compose run --rm sospeed`を使用
-- 理由: 標準入力が正しく接続されないため
+- `docker run -it`でインタラクティブモードを使用すること
+- Makefileを使用した実行を推奨: `make build` → `make run`
+- DevContainer使用時はVSCodeで "Reopen in Container" を選択
 
 ## 開発ワークフロー
 1. **機能追加・変更時**:
@@ -121,8 +124,8 @@ sospeed/
    - コミットメッセージ案の提示（ユーザーがコミット実行）
 
 2. **テスト実行**:
-   - ローカル: `ruby -Ilib:test test/test_*.rb`
-   - Docker: `docker compose run --rm sospeed-test`（設定されている場合）
+   - ローカル: `make test` または `ruby -Ilib:test test/test_*.rb`
+   - Docker: `make build` → `docker run --rm sospeed ruby -Ilib:test test/test_*.rb`
 
 3. **リファクタリング時**:
    - 既存テストが通ることを確認してから開始

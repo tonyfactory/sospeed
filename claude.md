@@ -6,11 +6,13 @@
 ## ファイル構成
 ```
 sospeed/
-├── sospeed.rb           # メインプログラム（Ruby単一ファイル）
+├── bin/sospeed          # 実行ファイル
+├── lib/sospeed/         # ソースコード
+├── test/                # テストコード
 ├── spec.md              # 詳細仕様書（人間向け）
 ├── claude.md            # このファイル（AI向けプロジェクトガイド）
 ├── Dockerfile           # Ruby 3.3イメージ
-├── docker-compose.yml   # Docker実行設定
+├── Makefile             # ビルド・実行用コマンド
 └── .dockerignore        # Docker除外設定
 ```
 
@@ -20,8 +22,9 @@ sospeed/
 - **実行環境**: ローカル（Ruby必須）またはDocker（Ruby不要）
 
 ## 実行方法
-- **ローカル**: `ruby sospeed.rb`
-- **Docker**: `docker compose run --rm sospeed`
+- **ローカル**: `ruby bin/sospeed`
+- **Docker**: `make build` → `make run`
+- **DevContainer**: VSCodeで "Reopen in Container" を選択
 
 ## コアクラス: SoSpeed
 
@@ -87,7 +90,5 @@ sospeed/
 - 修正は「〜を修正」形式
 
 ## 注意事項
-- Gemfileなし（依存関係なし）
-- 単一ファイル構成を維持
-- 標準ライブラリのみ使用
-- Docker環境では`docker compose run`必須（`up`では標準入力が正しく接続されない）
+- 標準ライブラリのみ使用（`io/console`, `set`）
+- Docker環境では`docker run -it`でインタラクティブモードを有効化すること
