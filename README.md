@@ -1,6 +1,6 @@
-# SoSpeed - 素数スピード練習プログラム
+# SoSpeed - 素因数分解スピードゲーム
 
-素数の掛け算で構成された数値を素因数分解するスピード練習プログラムです。
+特定の数値の素因数分解をなるべく早く行うスピードゲームです。
 
 ## 開発環境セットアップ
 
@@ -28,7 +28,7 @@
 4. **プログラムの実行**
    ```bash
    # コンテナ内で実行
-   ruby sospeed.rb
+   ruby bin/sospeed
    ```
 
 ### ローカル環境で実行する場合
@@ -39,25 +39,36 @@
 #### 実行方法
 ```bash
 # 標準モード
-ruby sospeed.rb
+ruby bin/sospeed
 
 # レベル指定
-ruby sospeed.rb --level 3
+ruby bin/sospeed --level 3
 
 # 入力モード指定
-ruby sospeed.rb --mode 2
+ruby bin/sospeed --mode 2
 
 # 問題数指定（裏モード）
-ruby sospeed.rb --questions 10
+ruby bin/sospeed --questions 10
 
 # ヘルプ表示
-ruby sospeed.rb --help
+ruby bin/sospeed --help
 ```
 
-### Docker Compose で実行する場合
+### Docker で実行する場合
 
+#### 初回（イメージビルド）
 ```bash
-docker compose run --rm sospeed
+docker build -t sospeed .
+```
+
+#### 実行方法
+```bash
+# 標準モード（対話形式）
+docker run --rm -it sospeed
+
+# オプション指定
+docker run --rm -it sospeed --level 3 --mode 2
+docker run --rm -it sospeed --questions 10
 ```
 
 ## ゲームルール
@@ -102,13 +113,13 @@ sospeed/
 ├── .devcontainer/          # Dev Containers設定
 │   ├── devcontainer.json
 │   └── Dockerfile
+├── bin/                    # 実行ファイル
+│   └── sospeed
 ├── lib/                    # ソースコード
 │   └── sospeed/
 ├── test/                   # テストコード
-├── sospeed.rb              # メインプログラム
 ├── Gemfile                 # Ruby依存関係
-├── Dockerfile              # 実行用Dockerイメージ
-├── docker-compose.yml      # Docker Compose設定
+├── Dockerfile              # Docker実行用イメージ
 └── README.md               # このファイル
 ```
 

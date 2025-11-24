@@ -1,15 +1,15 @@
-# 素数スピード練習プログラム 仕様書
+# 素因数分解スピードゲーム - SoSpeed
 
 ## 概要
-素数の掛け算で構成された数値を素因数分解するスピードを競う練習プログラム。
+出題された数値の素因数分解のスピードを競うゲーム。
 レベル1〜4の難易度を選択し、5問を解き終わるまでの時間を計測し、最短タイムを目指す。
 
 ## プログラム情報
-- **ファイル名**: `sospeed.rb`
+- **エントリーポイント**: `bin/sospeed`
 - **言語**: Ruby
 - **実行方法**:
-  - ローカル環境: `ruby sospeed.rb`
-  - Docker環境: `docker compose run --rm sospeed`
+  - ローカル環境: `ruby bin/sospeed`
+  - Docker環境: `docker run --rm -it sospeed`（初回: `docker build -t sospeed .`）
 - **コマンドラインオプション**:
   - `--level LEVEL` または `-l LEVEL`: 難易度を指定（1〜4）
   - `--mode MODE` または `-m MODE`: 入力モードを指定（1=スペース区切り、2=キーボード割り当て）
@@ -24,16 +24,16 @@ Rubyがインストールされている環境で実行する方法です。
 
 ```bash
 # 通常モード（対話形式で難易度・操作方法・問題数を選択）
-ruby sospeed.rb
+ruby bin/sospeed
 
 # オプション指定モード
-ruby sospeed.rb --level 3 --mode 2              # レベル3、キーボード方式、5問
-ruby sospeed.rb --questions 10                  # 問題数を10問に指定（裏モード）
-ruby sospeed.rb -l 2 -m 1 -q 20                 # 短縮形式も可能
+ruby bin/sospeed --level 3 --mode 2              # レベル3、キーボード方式、5問
+ruby bin/sospeed --questions 10                  # 問題数を10問に指定（裏モード）
+ruby bin/sospeed -l 2 -m 1 -q 20                 # 短縮形式も可能
 ```
 
 **必要な環境:**
-- Ruby 2.5以上（推奨: Ruby 3.x）
+- Ruby 3.3以上（推奨）
 
 ### 方法2: Docker環境で実行（Ruby不要）
 
@@ -41,21 +41,21 @@ ruby sospeed.rb -l 2 -m 1 -q 20                 # 短縮形式も可能
 
 **必要な環境:**
 - Docker
-- Docker Compose
 
 **起動方法:**
 
 ```bash
-# 通常モード
-docker compose run --rm sospeed
+# 初回のみ: Dockerイメージをビルド
+docker build -t sospeed .
+
+# 通常モード（対話形式）
+docker run --rm -it sospeed
 
 # オプション指定モード
-docker compose run --rm sospeed ruby sospeed.rb --level 3 --mode 2
-docker compose run --rm sospeed ruby sospeed.rb --questions 10
-docker compose run --rm sospeed ruby sospeed.rb -l 2 -m 1 -q 20
+docker run --rm -it sospeed --level 3 --mode 2
+docker run --rm -it sospeed --questions 10
+docker run --rm -it sospeed -l 2 -m 1 -q 20
 ```
-
-ゲームが起動したら、通常通りプレイできます。
 
 **終了方法:**
 
@@ -64,8 +64,7 @@ docker compose run --rm sospeed ruby sospeed.rb -l 2 -m 1 -q 20
 
 **補足:**
 - 初回起動時はDockerイメージのビルドに時間がかかりますが、2回目以降は素早く起動します
-- `sospeed.rb`を編集した場合、次回の`docker compose run`で変更が反映されます
-- イメージを再ビルドしたい場合: `docker compose build`
+- コードを編集した場合は `docker build -t sospeed .` で再ビルドが必要です
 
 ## ゲームルール
 
