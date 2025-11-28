@@ -20,12 +20,7 @@ module SoSpeed
 
       def read_space_separated
         print "素因数を入力 > "
-        # Bypass user input during tests
-        if ENV['RUBY_ENV'] == 'test'
-          "2 3"
-        else
-          gets.chomp
-        end
+        gets.chomp
       end
 
       def read_keyboard_mapping

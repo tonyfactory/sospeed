@@ -13,12 +13,6 @@ module SoSpeed
       }
 
       def read_with_mapping
-        # Bypass user input during tests
-        if ENV['RUBY_ENV'] == 'test'
-          puts "素因数を入力 > 2 3"
-          return "2 3"
-        end
-
         factors = []
 
         print "素因数を入力 > "

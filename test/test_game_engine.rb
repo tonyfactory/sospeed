@@ -78,12 +78,19 @@ class TestGameEngine < Minitest::Test
     @original_timer_new = SoSpeed::Timer.method(:new)
     @original_generator_new = SoSpeed::Question::Generator.method(:new)
 
+    # Capture mock references in local variables for closure
+    screen_mock = @screen_mock
+    input_reader_mock = @input_reader_mock
+    validator_mock = @validator_mock
+    timer_mock = @timer_mock
+    generator_mock = @generator_mock
+
     # Stub constructors to return mocks
-    SoSpeed::PlayerInterface::Screen.define_singleton_method(:new) { |*args| @screen_mock }
-    SoSpeed::PlayerInterface::InputReader.define_singleton_method(:new) { |*args| @input_reader_mock }
-    SoSpeed::Question::Validator.define_singleton_method(:new) { |*args| @validator_mock }
-    SoSpeed::Timer.define_singleton_method(:new) { |*args| @timer_mock }
-    SoSpeed::Question::Generator.define_singleton_method(:new) { |*args| @generator_mock }
+    SoSpeed::PlayerInterface::Screen.define_singleton_method(:new) { |*args| screen_mock }
+    SoSpeed::PlayerInterface::InputReader.define_singleton_method(:new) { |*args| input_reader_mock }
+    SoSpeed::Question::Validator.define_singleton_method(:new) { |*args| validator_mock }
+    SoSpeed::Timer.define_singleton_method(:new) { |*args| timer_mock }
+    SoSpeed::Question::Generator.define_singleton_method(:new) { |*args| generator_mock }
   end
 
   def restore_constructors

@@ -36,7 +36,7 @@ class TestScreen < Minitest::Test
     output = @stdout.string
 
     assert_equal :level1, difficulty
-    assert_includes output, "レベル1 (素数: 2,3,5,7 / 2個 / 数字50まで)"
+    assert_includes output, "レベル1 (素数: 2,3,5,7 / 2個 / 数字6〜70)"
     assert_includes output, "難易度: レベル1 が選択されました"
   end
 
