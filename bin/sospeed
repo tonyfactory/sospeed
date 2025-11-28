@@ -13,7 +13,7 @@ def parse_options
     opts.separator ""
     opts.separator "オプション:"
 
-    opts.on("--level LEVEL", Integer, "難易度を指定 (1-4)") do |level|
+    opts.on("-l", "--level LEVEL", Integer, "難易度を指定 (1-4)") do |level|
       unless (1..4).include?(level)
         puts "=" * 60
         puts "エラー: レベルは1〜4の範囲で指定してください"
@@ -21,10 +21,10 @@ def parse_options
         puts ""
         puts "利用可能なレベル:"
         puts ""
-        puts "  レベル1: 素数 2,3,5,7 を使用 / 2個の素数 / 数字50まで / 5問"
-        puts "  レベル2: 素数 2,3,5,7 を使用 / 3個の素数 / 数字500まで / 5問"
-        puts "  レベル3: 素数 2,3,5,7,11 を使用 / 4個の素数 / 数字1000まで / 5問"
-        puts "  レベル4: 素数 2,3,5,7,11 を使用 / 4〜5個の素数 / 数字10000まで / 5問"
+        puts "  レベル1: 素数 2,3,5,7 を使用 / 2個の素数 / 数字6〜70 / 5問"
+        puts "  レベル2: 素数 2,3,5,7 を使用 / 3個の素数 / 数字36〜225 / 5問"
+        puts "  レベル3: 素数 2,3,5,7,11 を使用 / 4個の素数 / 数字132〜1100 / 5問"
+        puts "  レベル4: 素数 2,3,5,7,11 を使用 / 4〜5個の素数 / 数字1089〜10500 / 5問"
         puts ""
         puts "例: ruby bin/sospeed --level 3"
         puts "=" * 60
@@ -33,7 +33,7 @@ def parse_options
       options[:difficulty] = :"level#{level}"
     end
 
-    opts.on("--mode MODE", Integer, "入力モードを指定 (1=スペース区切り, 2=キーボード割り当て)") do |mode|
+    opts.on("-m", "--mode MODE", Integer, "入力モードを指定 (1=スペース区切り, 2=キーボード割り当て)") do |mode|
       unless (1..2).include?(mode)
         puts "=" * 60
         puts "エラー: モードは1または2を指定してください"
