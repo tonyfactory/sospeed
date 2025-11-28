@@ -146,11 +146,23 @@ module SoSpeed
         sleep(Question::Validator::ERROR_WAIT_TIME)
       end
 
-      def show_result(elapsed_time)
+      def show_result(elapsed_time, question_times)
         puts ""
         puts "=" * 50
         puts "お疲れ様でした!"
         puts "=" * 50
+        puts ""
+
+        # 各問題の詳細を表示
+        question_times.each_with_index do |question_info, index|
+          factors_str = question_info[:factors].sort.join(" × ")
+          printf "第%d問: %d = %s (%.2f秒)\n",
+                 index + 1,
+                 question_info[:number],
+                 factors_str,
+                 question_info[:elapsed]
+        end
+
         puts ""
         printf "合計時間: %.2f秒\n", elapsed_time
         puts ""

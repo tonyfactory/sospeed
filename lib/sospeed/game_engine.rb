@@ -13,6 +13,7 @@ module SoSpeed
       @input_reader = PlayerInterface::InputReader.new
       @validator = Question::Validator.new
       @timer = Timer.new
+      @question_times = []
     end
 
     def start
@@ -46,7 +47,15 @@ module SoSpeed
 
       # 問題を順次解く
       @questions.each_with_index do |question, index|
+        question_start_time = Time.now
         solve_question(question, index + 1)
+        question_elapsed = Time.now - question_start_time
+
+        @question_times << {
+          number: question[:number],
+          factors: question[:factors],
+          elapsed: question_elapsed
+        }
       end
 
       # 計測終了
@@ -74,7 +83,7 @@ module SoSpeed
     end
 
     def result_phase
-      @screen.show_result(@timer.elapsed)
+      @screen.show_result(@timer.elapsed, @question_times)
     end
   end
 end

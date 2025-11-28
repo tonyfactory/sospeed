@@ -91,9 +91,15 @@ class TestScreen < Minitest::Test
   end
 
   def test_show_result
-    @screen.show_result(10.5)
+    question_times = [
+      { number: 6, factors: [2, 3], elapsed: 3.5 },
+      { number: 15, factors: [3, 5], elapsed: 7.0 }
+    ]
+    @screen.show_result(10.5, question_times)
     output = @stdout.string
 
     assert_includes output, "合計時間: 10.50秒"
+    assert_includes output, "第1問: 6 = 2 × 3 (3.50秒)"
+    assert_includes output, "第2問: 15 = 3 × 5 (7.00秒)"
   end
 end

@@ -2,7 +2,7 @@
 
 require_relative 'test_helper'
 
-require_relative '../lib/sospeed/game_engine'
+require_relative '../lib/sospeed'
 
 class TestGameEngine < Minitest::Test
   def setup
@@ -131,7 +131,9 @@ class TestGameEngine < Minitest::Test
 
       @timer_mock.expect(:stop, nil)
       @timer_mock.expect(:elapsed, 10.5)
-      @screen_mock.expect(:show_result, nil, [10.5])
+      @screen_mock.expect(:show_result, nil) do |elapsed, question_times|
+        elapsed == 10.5 && question_times.is_a?(Array) && question_times.size == question_count
+      end
 
       # This block is empty because we're just setting up expectations
     end
@@ -175,7 +177,9 @@ class TestGameEngine < Minitest::Test
 
       @timer_mock.expect(:stop, nil)
       @timer_mock.expect(:elapsed, 10.5)
-      @screen_mock.expect(:show_result, nil, [10.5])
+      @screen_mock.expect(:show_result, nil) do |elapsed, question_times|
+        elapsed == 10.5 && question_times.is_a?(Array) && question_times.size == question_count
+      end
 
       # This block is empty because we're just setting up expectations
     end
