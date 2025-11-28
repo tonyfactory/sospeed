@@ -29,12 +29,21 @@
    ```bash
    # コンテナ内で実行
    ruby bin/sospeed
+
+   # テストを実行
+   make test
    ```
 
 ### ローカル環境で実行する場合
 
 #### 必要なもの
 - Ruby 3.3以上
+
+#### セットアップ
+```bash
+# 依存gemのインストール（テスト実行に必要）
+bundle install
+```
 
 #### 実行方法
 ```bash
@@ -54,15 +63,31 @@ ruby bin/sospeed --questions 10
 ruby bin/sospeed --help
 ```
 
-### Docker で実行する場合
-
-#### 初回（イメージビルド）
+#### テスト実行
 ```bash
-docker build -t sospeed .
+# 全テストを実行
+make test
+
+# 特定のテストファイルを実行
+make test-file FILE=test/test_difficulty.rb
 ```
 
-#### 実行方法
+### Docker で実行する場合
+
+#### Makefile を使う場合（推奨）
 ```bash
+# イメージをビルド
+make build
+
+# 標準モード（対話形式）
+make run
+```
+
+#### docker コマンドを直接使う場合
+```bash
+# イメージビルド
+docker build -t sospeed .
+
 # 標準モード（対話形式）
 docker run --rm -it sospeed
 
@@ -98,30 +123,6 @@ docker run --rm -it sospeed --questions 10
 - `a`:2  `s`:3  `d`:5  `f`:7  `g`:11
 - キーを押すと数字が表示され、Enterで確定
 - Backspaceで削除可能
-
-## 開発
-
-### テスト実行
-```bash
-# Dev Container内、またはローカルで
-bundle exec ruby -Ilib:test test/test_*.rb
-```
-
-### ファイル構成
-```
-sospeed/
-├── .devcontainer/          # Dev Containers設定
-│   ├── devcontainer.json
-│   └── Dockerfile
-├── bin/                    # 実行ファイル
-│   └── sospeed
-├── lib/                    # ソースコード
-│   └── sospeed/
-├── test/                   # テストコード
-├── Gemfile                 # Ruby依存関係
-├── Dockerfile              # Docker実行用イメージ
-└── README.md               # このファイル
-```
 
 ## ライセンス
 
