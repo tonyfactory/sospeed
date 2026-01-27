@@ -1,5 +1,5 @@
-# Ruby 3.3開発環境
-FROM ruby:3.3-slim
+# Ruby 4.0開発環境
+FROM ruby:4.0-slim
 
 # 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \

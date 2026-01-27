@@ -1,5 +1,5 @@
-# Ruby 3.3の公式イメージを使用
-FROM ruby:3.3-slim
+# Ruby 4.0の公式イメージを使用
+FROM ruby:4.0-slim
 
 # 日本語ロケールを設定
 ENV LANG=ja_JP.UTF-8 \
